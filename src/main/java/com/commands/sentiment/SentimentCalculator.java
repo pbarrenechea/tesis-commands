@@ -7,8 +7,6 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 /**
  * Created by Pablo on 3/20/2016.
  */
@@ -23,7 +21,7 @@ public class SentimentCalculator {
         return instance;
     }
 
-    public static String calculate(String text) throws UnirestException {
+    public static SentimentItem calculate(String text) throws UnirestException {
         // These code snippets use an open-source library.
         HttpResponse<JsonNode> response = Unirest.post(Config.getInstance().getProperty("mashape.url"))
                 .header("X-Mashape-Key", Config.getInstance().getProperty("mashape.key"))
@@ -32,6 +30,7 @@ public class SentimentCalculator {
                 .field("txt", text)
                 .asJson();
             JSONObject map = (JSONObject) response.getBody().getObject().get("result");
-            return (String) map.get("sentiment");
+            SentimentItem resultObj = new SentimentItem((String)map.get("sentiment"), Double.parseDouble((String) map.get("confidence")) ) ;
+            return resultObj;
     }
 }

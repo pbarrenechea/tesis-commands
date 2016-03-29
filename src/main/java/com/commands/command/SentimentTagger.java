@@ -3,6 +3,7 @@ package com.commands.command;
 import com.commands.dbConnector.DbConnector;
 import com.commands.dbConnector.PostgresConnector;
 import com.commands.sentiment.SentimentCalculator;
+import com.commands.sentiment.SentimentItem;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -19,9 +20,9 @@ public class SentimentTagger implements Command {
 
     private static final Logger logger = LogManager.getLogger(SentimentTagger.class);
 
-    private final String uncalculatedQuery = "SELECT * FROM proccessed_text WHERE sentiment = 99 ";
+    private final String uncalculatedQuery = "SELECT * FROM tips WHERE sentiment = 99 ";
 
-    private final String updateSentimentQuery = "UPDATE proccessed_text SET sentiment = __SENTIMENT__ where id = __ID__  ";
+    private final String updateSentimentQuery = "UPDATE tips SET sentiment = __SENTIMENT__, sentiment_value = __CONFIDENCE__ where id_user = __USERID__  and  id_venue = '__VENUEID__'";
 
     private final int itemWindow = 5;
 
@@ -41,11 +42,13 @@ public class SentimentTagger implements Command {
             ResultSet itemsToCalculate = db.getLastResults();
             int calculatedItems = 0;
             while( itemsToCalculate.next() ){
-                logger.info( "Calculating sentiment for: " + itemsToCalculate.getString("entry_text") );
-                String qUpdate = updateSentimentQuery.replace("__ID__", Long.toString(itemsToCalculate.getLong("id")));
+                logger.info( "Calculating sentiment for: " + itemsToCalculate.getString("tip_text") );
+                String qUpdate = updateSentimentQuery.replace("__USERID__", Long.toString(itemsToCalculate.getLong("id_user")));
+                qUpdate = qUpdate.replace("__VENUEID__", itemsToCalculate.getString("id_venue") );
                 try {
-                    String resultSentiment = SentimentCalculator.calculate(itemsToCalculate.getString("entry_text"));
-                    qUpdate = qUpdate.replace("__SENTIMENT__", sentimentMap.get(resultSentiment).toString());
+                    SentimentItem resultSentiment = SentimentCalculator.calculate(itemsToCalculate.getString("tip_text"));
+                    qUpdate = qUpdate.replace("__SENTIMENT__",  String.valueOf(sentimentMap.get(resultSentiment.getSentiment())));
+                    qUpdate = qUpdate.replace("__CONFIDENCE__" , String.valueOf(resultSentiment.getAccuracy()));
                     logger.info("Executing query: " + qUpdate);
                     db.executeUpdate(qUpdate);
                 } catch (UnirestException e) {
