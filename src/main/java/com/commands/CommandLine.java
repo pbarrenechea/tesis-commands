@@ -20,46 +20,28 @@ public class CommandLine {
     private static Scanner user_input;
     private static Command commandToExecute;
 
-    public static void main(String[] args) throws UnirestException {
+    public static void main(String[] args) throws UnirestException, SQLException, IOException {
         System.out.println("Enter command: ");
         user_input = new Scanner( System.in );
         String command;
         command = user_input.next( );
         if( command.equals("sentiment") ){
             commandToExecute = new SentimentTagger();
-            try {
-                commandToExecute.run();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
             //loads categories from categories.json file
         }else if( command.equals("categories") ){
-            try {
-                commandToExecute = new CategoriesLoader();
-                try {
-                    commandToExecute.run();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            commandToExecute = new CategoriesLoader();
             //maps category parent id to the corresponding integer
         }else if( command.equals("parents") ){
-            try{
-                commandToExecute = new CategoriesParentMapper();
-                commandToExecute.run();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            commandToExecute = new CategoriesParentMapper();
             //creates a relationship table for venues and categories
         }else if( command.equals("venueCategories") ){
             commandToExecute = new CategoryVenueMapper();
-            try {
-                commandToExecute.run();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            //Sets venue_id as an integer on the tips table
+        }else if( command.equals("venueTips") ){
+            commandToExecute = new TipsVenueMapper();
+        }else if( command.equals("globalTfIdf") ){
+            commandToExecute = new CategoryTfIdf();
         }
+        commandToExecute.run();
     }
 }
