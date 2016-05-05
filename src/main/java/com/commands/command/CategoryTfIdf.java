@@ -19,7 +19,7 @@ public class CategoryTfIdf implements Command {
 
     private static final Logger logger = LogManager.getLogger(SentimentTagger.class);
 
-    private static final String queryCategoriesTotals = "select c.name, c.id, count(*) as totals\n" +
+    private static final String queryCategoriesTotals = "select  c.id, count(*) as totals\n" +
             "from category c\n" +
             "INNER JOIN venue_category vc on ( vc.category = c.id )\n" +
             "INNER JOIN tips t on ( t.venue_id = vc.venue_id)\n" +

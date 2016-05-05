@@ -53,7 +53,7 @@ public class CategoriesLoader implements Command {
     }
 
     public void run() throws SQLException, UnirestException {
-        logger.debug("Executig categories loader");
+        logger.debug("Executing categories loader");
         JSONArray categories = entryData.getJSONObject("response").getJSONArray("categories");
         db = new PostgresConnector();
         db.connect();

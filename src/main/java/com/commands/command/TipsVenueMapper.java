@@ -38,7 +38,7 @@ public class TipsVenueMapper implements Command {
     }
 
     public void run() throws SQLException, UnirestException {
-        db.executeQuery("SELECT * FROM tips");
+        db.executeQuery("SELECT * FROM tips where venue_id IS NULL");
         ResultSet tips = db.getLastResults();
         while( tips.next() ){
             String oldVenueId = tips.getString("id_venue");

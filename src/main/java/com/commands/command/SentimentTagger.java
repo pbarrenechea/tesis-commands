@@ -23,9 +23,9 @@ public class SentimentTagger implements Command {
 
     private final String uncalculatedQuery = "SELECT * FROM tips WHERE sentiment = 99 ";
 
-    private final String updateSentimentQuery = "UPDATE tips SET sentiment = __SENTIMENT__, sentiment_value = __CONFIDENCE__ where id_user = __USERID__  and  id_venue = '__VENUEID__'";
+    private final String updateSentimentQuery = "UPDATE tips SET sentiment = __SENTIMENT__, sentiment_value = __CONFIDENCE__ where id = __ID__ ";
 
-    private final int itemWindow = 30;
+    private final int itemWindow = 100;
 
     private HashMap<String, Integer> sentimentMap = new HashMap<String, Integer>();
 
@@ -47,8 +47,7 @@ public class SentimentTagger implements Command {
                 int calculatedItems = 0;
                 while( itemsToCalculate.next() ){
                     logger.info( "Calculating sentiment for: " + itemsToCalculate.getString("tip_text") );
-                    String qUpdate = updateSentimentQuery.replace("__USERID__", Long.toString(itemsToCalculate.getLong("id_user")));
-                    qUpdate = qUpdate.replace("__VENUEID__", itemsToCalculate.getString("id_venue") );
+                    String qUpdate = updateSentimentQuery.replace("__ID__", Long.toString(itemsToCalculate.getLong("id")));
                     try {
                         SentimentItem resultSentiment = SentimentCalculator.calculate(itemsToCalculate.getString("tip_text"));
                         qUpdate = qUpdate.replace("__SENTIMENT__",  String.valueOf(sentimentMap.get(resultSentiment.getSentiment())));
