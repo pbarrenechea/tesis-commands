@@ -1,4 +1,4 @@
-package com.commands.dbConnector;
+package com.dbConnector;
 
 import com.commands.config.Config;
 import org.apache.log4j.LogManager;

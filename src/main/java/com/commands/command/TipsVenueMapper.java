@@ -1,7 +1,7 @@
 package com.commands.command;
 
-import com.commands.dbConnector.DbConnector;
-import com.commands.dbConnector.PostgresConnector;
+import com.dbConnector.DbConnector;
+import com.dbConnector.PostgresConnector;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

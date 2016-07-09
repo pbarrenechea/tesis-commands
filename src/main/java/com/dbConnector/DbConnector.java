@@ -1,4 +1,4 @@
-package com.commands.dbConnector;
+package com.dbConnector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

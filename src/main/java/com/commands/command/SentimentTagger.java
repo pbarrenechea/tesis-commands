@@ -1,7 +1,7 @@
 package com.commands.command;
 
-import com.commands.dbConnector.DbConnector;
-import com.commands.dbConnector.PostgresConnector;
+import com.dbConnector.DbConnector;
+import com.dbConnector.PostgresConnector;
 import com.commands.sentiment.SentimentCalculator;
 import com.commands.sentiment.SentimentItem;
 import com.mashape.unirest.http.exceptions.UnirestException;

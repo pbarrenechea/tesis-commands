@@ -1,7 +1,7 @@
 package com.commands.command;
 
-import com.commands.dbConnector.DbConnector;
-import com.commands.dbConnector.PostgresConnector;
+import com.dbConnector.DbConnector;
+import com.dbConnector.PostgresConnector;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
 
 /**
  * Created by Usuario on 08/07/2016.
