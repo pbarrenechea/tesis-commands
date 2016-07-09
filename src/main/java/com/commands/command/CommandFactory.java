@@ -43,6 +43,8 @@ public class CommandFactory {
         }else if( command.equals("globalTfIdf") ){
             commandToExecute = new CategoryTfIdf();
             //Calcuales TF/idf grouping by user
+        }else if ( command.equals("globalCityCategoriesWeight") ){
+            commandToExecute = new CategoryCityWeight();
         }else if( command.equals("userCategoriesPreference") ){
             commandToExecute = new UserCategoriesPreferences();
         }else{
