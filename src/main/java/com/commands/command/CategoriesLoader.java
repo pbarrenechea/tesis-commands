@@ -21,7 +21,7 @@ public class CategoriesLoader implements Command {
     private static final Logger logger = LogManager.getLogger(SentimentTagger.class);
     private String JSON_PATH = "categories.json";
     private JSONObject entryData;
-    private final String insertQuery = "INSERT INTO CATEGORY (name, hash_id,parent_hash_id) values ('_NAME_', '_HASH_', '_PARENT_HASH_' )";
+    private final String insertQuery = "INSERT INTO CATEGORY (name, hash_id,parent_hash_id, level) values ('_NAME_', '_HASH_', '_PARENT_HASH_', _LEVEL_ )";
     private DbConnector db;
 
     public CategoriesLoader() throws IOException {
@@ -32,11 +32,12 @@ public class CategoriesLoader implements Command {
         entryData = new JSONObject(tokener);
     }
 
-    private void parseCategories(JSONArray categories, String parentId){
+    private void parseCategories(JSONArray categories, String parentId, int level){
         for( int i = 0; i < categories.length(); i++ ){
             String qInsert = insertQuery.replace("_NAME_", (String)((JSONObject) categories.get(i)).get("name"));
             qInsert = qInsert.replace("_PARENT_HASH_", parentId);
             qInsert = qInsert.replace("_HASH_", (String)((JSONObject) categories.get(i)).get("id"));
+            qInsert = qInsert.replace("_LEVEL_", String.valueOf(level));
            logger.info("Executing query: " + qInsert);
             try {
                 db.executeUpdate(qInsert);
@@ -44,7 +45,7 @@ public class CategoriesLoader implements Command {
                     logger.debug("Has subcategories, going in depth");
                     JSONArray subCategories = ((JSONObject)categories.get(i)).getJSONArray("categories");
                     String subCategoryParentId = (String)((JSONObject) categories.get(i)).get("id");
-                    this.parseCategories(subCategories, subCategoryParentId);
+                    this.parseCategories(subCategories, subCategoryParentId, level + 1);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -57,6 +58,6 @@ public class CategoriesLoader implements Command {
         JSONArray categories = entryData.getJSONObject("response").getJSONArray("categories");
         db = new PostgresConnector();
         db.connect();
-        this.parseCategories(categories,"");
+        this.parseCategories(categories,"", 0);
     }
 }
