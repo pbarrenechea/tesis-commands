@@ -1,7 +1,7 @@
 package com.recommender;
 
 import com.recommender.dataStructures.TreesLoader;
-import com.recommender.dataStructures.UserCategoryTree;
+import com.recommender.similarity.UserTreeComparison;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.mahout.cf.taste.common.TasteException;

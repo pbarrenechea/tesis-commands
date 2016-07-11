@@ -1,4 +1,4 @@
-package com.recommender;
+package com.recommender.similarity;
 
 import com.recommender.dataStructures.TreesLoader;
 import com.recommender.dataStructures.UserCategoryNode;
@@ -40,11 +40,14 @@ public class UserTreeComparison implements UserSimilarity{
         long levels = user1Tree.getLevels();
         double result = 0.0;
         for( int i = 0 ; i < levels; i++  ){
-            double beta = Math.pow(2, i+1);
-            double currentLevelSimilarity = this.levelSimilarity(i, user1Tree, user2Tree);
-            double entropyDistance = 1 + Math.abs(user1Tree.getLevelEntrophy(i) - user2Tree.getLevelEntrophy(i));
-            result += beta * (  currentLevelSimilarity / entropyDistance );
+            if( user1Tree != null && user2Tree != null ){
+                double beta = Math.pow(2, i+1);
+                double currentLevelSimilarity = this.levelSimilarity(i, user1Tree, user2Tree);
+                double entropyDistance = 1 + Math.abs(user1Tree.getLevelEntrophy(i) - user2Tree.getLevelEntrophy(i));
+                result += beta * (  currentLevelSimilarity / entropyDistance );
+            }
         }
+        logger.debug("Similarity between "+ user1 + " and " + user2 +  " is " + result);
         return result;
     }
 

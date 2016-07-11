@@ -1,5 +1,6 @@
 package com.recommender;
 
+import com.recommender.dataStructures.TreesLoader;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -23,13 +24,13 @@ public class SampleRecommender {
 	private static final Logger logger = LogManager.getLogger(SampleRecommender.class);
 
 	public static void main(String[] args) throws IOException, TasteException, SQLException {
-		
+        TreesLoader.getInstance().load("New York");
 		BasicConfigurator.configure();
 
 		//DataModel model = new FileDataModel(new File("C:/ratings2_fromnyc.csv"));
-		DataModel model = new FileDataModel(new File("C:/ratings.csv"));
+		DataModel model = new FileDataModel(new File("C:/Users/Usuario/Desktop/ratings.csv"));
 		RandomUtils.useTestSeed();
-		UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+		//UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 		 //UserSimilarity similarity = new UncenteredCosineSimilarity(model);
 		//UserNeighborhood neighborhood = new NearestNUserNeighborhood(500, similarity, model);
 		/*System.out.println(neighborhood.getUserNeighborhood(45).length);

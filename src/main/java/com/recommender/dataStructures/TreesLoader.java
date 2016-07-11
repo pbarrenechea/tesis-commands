@@ -20,7 +20,7 @@ public class TreesLoader {
             "inner join category c on ( ucc.category = c.id )\n" +
             "where  ucc.city = '_CITY_'";
 
-    private static final String queryTotalCheckinsByUser = "select id_user,count(*) from tips t\n" +
+    private static final String queryTotalCheckinsByUser = "select id_user,count(*) as total from tips t\n" +
             "  inner join venue v on (t.id_venue=v.venue_id)\n" +
             "  where v.city= '_CITY_'\n" +
             "  group by t.id_user";
@@ -68,7 +68,7 @@ public class TreesLoader {
         ResultSet checkinsByUser = db.getLastResults();
         while( checkinsByUser.next() ){
             Long idUser = new Long(checkinsByUser.getLong("id_user"));
-            long count = checkinsByUser.getLong("count");
+            long count = checkinsByUser.getLong("total");
             UserCategoryTree currentUserTree = userTrees.get(idUser);
             if (currentUserTree!=null)
             currentUserTree.setTotalChekins(count);

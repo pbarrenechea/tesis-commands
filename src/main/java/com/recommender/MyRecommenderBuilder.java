@@ -1,4 +1,5 @@
 package com.recommender;
+import com.recommender.similarity.UserTreeComparison;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
@@ -13,10 +14,10 @@ public class MyRecommenderBuilder implements RecommenderBuilder {
 
 
 	public Recommender buildRecommender(DataModel dataModel) throws TasteException {
-		UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
-		UserNeighborhood neighborhood=null;
+		UserSimilarity similarity = new UserTreeComparison();
+		UserNeighborhood neighborhood;
 		 //neighborhood = new ThresholdUserNeighborhood(0.1, similarity, dataModel);
-		neighborhood =new NearestNUserNeighborhood(100, similarity, dataModel);
+		neighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
 		
 		/*try {
 			neighborhood = new MyNeighborhood(similarity, dataModel);
