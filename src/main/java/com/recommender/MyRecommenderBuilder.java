@@ -15,10 +15,10 @@ public class MyRecommenderBuilder implements RecommenderBuilder {
 
 	public Recommender buildRecommender(DataModel dataModel) throws TasteException {
 		UserSimilarity similarity = new UserTreeComparison();
+		//PearsonCorrelationSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
 		UserNeighborhood neighborhood;
 		 //neighborhood = new ThresholdUserNeighborhood(0.1, similarity, dataModel);
-		neighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
-		
+		neighborhood = new NearestNUserNeighborhood(15, 0.7, similarity, dataModel,0.9);
 		/*try {
 			neighborhood = new MyNeighborhood(similarity, dataModel);
 		} catch (IOException e) {
@@ -29,7 +29,6 @@ public class MyRecommenderBuilder implements RecommenderBuilder {
 		}*/
 		
 		return new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
-		//return new MyUserBasedRecommender(dataModel, neighborhood, similarity);
 	}
 
 }

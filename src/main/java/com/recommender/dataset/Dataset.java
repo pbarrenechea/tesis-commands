@@ -1,8 +1,8 @@
 package com.recommender.dataset;
 
 import com.recommender.dataset.entities.Checkin;
-import com.recommender.dataset.entities.User;
-import com.recommender.dataset.entities.Venue;
+import com.recommender.dataStructures.User;
+import com.recommender.dataStructures.Venue;
 import com.recommender.filter.QueryFilter;
 
 import java.sql.SQLException;

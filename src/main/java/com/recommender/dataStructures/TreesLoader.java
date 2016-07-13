@@ -53,10 +53,10 @@ public class TreesLoader {
             double score = userCategoryCitySet.getDouble("score");
             String categoryName = userCategoryCitySet.getString("name");
             int level = userCategoryCitySet.getInt("level");
-            UserCategoryNode node = new UserCategoryNode(idCategory, categoryName, score, checkins );
+            UserCategoryNode node = new UserCategoryNode(idUser, idCategory, categoryName, score, checkins );
             UserCategoryTree currentUserTree = userTrees.get(idUser);
             if( currentUserTree == null ){
-                currentUserTree = new UserCategoryTree();
+                currentUserTree = new UserCategoryTree(idUser);
                 userTrees.put(idUser, currentUserTree);
             }
             currentUserTree.add(node, level);

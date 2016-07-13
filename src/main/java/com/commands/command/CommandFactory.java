@@ -47,6 +47,8 @@ public class CommandFactory {
             commandToExecute = new CategoryCityWeight();
         }else if( command.equals("userCategoriesPreference") ){
             commandToExecute = new UserCategoriesPreferences();
+        }else if( command.equals("populateRatings") ){
+            commandToExecute = new PopulateRatings();
         }else{
             return null;
         }

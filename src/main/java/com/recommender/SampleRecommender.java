@@ -28,8 +28,8 @@ public class SampleRecommender {
 		BasicConfigurator.configure();
 
 		//DataModel model = new FileDataModel(new File("C:/ratings2_fromnyc.csv"));
-		DataModel model = new FileDataModel(new File("C:/Users/Usuario/Desktop/ratings.csv"));
-		RandomUtils.useTestSeed();
+		DataModel model = new FileDataModel(new File("ratings.csv"));
+		//RandomUtils.useTestSeed();
 		//UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 		 //UserSimilarity similarity = new UncenteredCosineSimilarity(model);
 		//UserNeighborhood neighborhood = new NearestNUserNeighborhood(500, similarity, model);
@@ -44,7 +44,7 @@ public class SampleRecommender {
 		RecommenderBuilder builder = new MyRecommenderBuilder();
 
 		RecommenderIRStatsEvaluator evaluator = new GenericRecommenderIRStatsEvaluator();
-		IRStatistics stats = evaluator.evaluate(builder, null, model, null, 10, 0.9, 0.8);
+		IRStatistics stats = evaluator.evaluate(builder, null, model, null, 2, GenericRecommenderIRStatsEvaluator.CHOOSE_THRESHOLD, 1.0);
 		System.out.format("The recommender precision is %f%n", stats.getPrecision());
 		System.out.format("The recommender recall is %f%n", stats.getRecall());
 		System.out.format("The recommender F1 is %f%n", stats.getF1Measure());

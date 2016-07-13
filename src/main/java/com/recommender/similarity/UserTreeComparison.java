@@ -47,7 +47,7 @@ public class UserTreeComparison implements UserSimilarity{
                 result += beta * (  currentLevelSimilarity / entropyDistance );
             }
         }
-        logger.debug("Similarity between "+ user1 + " and " + user2 +  " is " + result);
+        //logger.debug("Similarity between "+ user1 + " and " + user2 +  " is " + result);
         return result;
     }
 
