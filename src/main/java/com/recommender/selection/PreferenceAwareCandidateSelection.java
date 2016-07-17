@@ -15,7 +15,7 @@ public class PreferenceAwareCandidateSelection {
 
     private static final Logger logger = LogManager.getLogger(PreferenceAwareCandidateSelection.class);
 
-    private final int venuesToRecommend = 30;
+    private final int venuesToRecommend = 50000;
 
     private String city;
     private double latitude;
