@@ -22,7 +22,7 @@ public class Tester {
 
     public static void main(String[] args) throws SQLException, TasteException, IOException {
         FileWriter ratings = new FileWriter("ratings.csv", true);
-        DataCenter.getInstance().load("Los Angeles", 15,34.0554061333333,-118.245262816667);
+        DataCenter.getInstance().load("Los Angeles", 30,34.0554061333333,-118.245262816667);
         HashMap<Long, User> users = DataCenter.getInstance().getUsers();
         for( Map.Entry<Long, User> entry : users.entrySet()  ){
             PreferenceAwareCandidateSelection pacs = new PreferenceAwareCandidateSelection("Los Angeles",34.0554061333333,-118.245262816667, 15, entry.getKey() );
