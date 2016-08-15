@@ -1,4 +1,5 @@
 package com.recommender;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.model.DataModel;
 
 /**
@@ -16,7 +17,7 @@ public class RecommenderFactory {
         return instance;
     }
 
-    public CustomRecommender create(String str, DataModel data) {
+    public CustomRecommender create(String str, DataModel data) throws TasteException {
         CustomRecommender newCustomRecommender = null;
         if (str.equals("User")) {
             newCustomRecommender = new UserRecommender(data);

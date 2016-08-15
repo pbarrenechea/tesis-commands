@@ -37,7 +37,7 @@ public class UserTreeComparison implements UserSimilarity{
     public double userSimilarity(long user1, long user2) throws TasteException {
         UserCategoryTree user1Tree = TreesLoader.getInstance().getUserTree(new Long(user1));
         UserCategoryTree user2Tree = TreesLoader.getInstance().getUserTree(new Long(user2));
-        long levels = user1Tree.getLevels();
+        long levels = ( user1Tree != null ) ? user1Tree.getLevels() : 0 ;
         double result = 0.0;
         for( int i = 0 ; i < levels; i++  ){
             if( user1Tree != null && user2Tree != null ){
