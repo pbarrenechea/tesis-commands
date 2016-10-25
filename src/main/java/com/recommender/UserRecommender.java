@@ -12,6 +12,8 @@ import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
 import org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+import org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity;
+import org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.Recommender;
@@ -27,8 +29,9 @@ public class UserRecommender extends CustomRecommender{
         RecommenderIRStatsEvaluator evaluator = new GenericRecommenderIRStatsEvaluator();
 
         public Recommender buildRecommender(DataModel dataModel) throws TasteException {
-            UserSimilarity similarity = new UserTreeComparison();
-            UserNeighborhood neighborhood = new NearestNUserNeighborhood(10, 0.5, similarity, dataModel,0.5);
+            //UserSimilarity similarity = new UserTreeComparison();
+        	UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
+            UserNeighborhood neighborhood = new NearestNUserNeighborhood(1000, 0.5, similarity, dataModel,0.5);
             return new  GenericUserBasedRecommender(dataModel, neighborhood, similarity);
         }
     }

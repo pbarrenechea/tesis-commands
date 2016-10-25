@@ -33,7 +33,7 @@ public class SampleRecommender {
 	public static void main(String[] args) throws IOException, TasteException, SQLException {
         TreesLoader.getInstance().load("Los Angeles");
 		BasicConfigurator.configure();
-		DataModel model = new FileDataModel(new File("losangeles.csv"));
+		DataModel model = new FileDataModel(new File("losangelesbaseline.csv"));
 
 /*
         final SVDPlusPlusFactorizer factorizer2 = new SVDPlusPlusFactorizer(model, 10, 5);
