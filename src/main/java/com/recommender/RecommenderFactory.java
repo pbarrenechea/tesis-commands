@@ -23,7 +23,9 @@ public class RecommenderFactory {
             newCustomRecommender = new UserRecommender(data);
         } else if (str.equals("Matrix")) {
             newCustomRecommender = new MatrixFactorizationRecommender(data);
-        }
+        } else if (str.equals("Custom")) {
+    		newCustomRecommender = new CustomMatrixFactorizationRecommender(data);
+    	}
         return newCustomRecommender;
     }
 }

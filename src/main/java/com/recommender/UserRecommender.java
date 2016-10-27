@@ -29,8 +29,8 @@ public class UserRecommender extends CustomRecommender{
         RecommenderIRStatsEvaluator evaluator = new GenericRecommenderIRStatsEvaluator();
 
         public Recommender buildRecommender(DataModel dataModel) throws TasteException {
-            //UserSimilarity similarity = new UserTreeComparison();
-        	UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
+            UserSimilarity similarity = new UserTreeComparison();
+        	//UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
             UserNeighborhood neighborhood = new NearestNUserNeighborhood(1000, 0.5, similarity, dataModel,0.5);
             return new  GenericUserBasedRecommender(dataModel, neighborhood, similarity);
         }
