@@ -20,24 +20,31 @@ public class UsersFeaturesMatrix {
 	private static final String queryUserPreference = "select * from user_city_category_scores uccs\n"
 			+ "where uccs.city = '_CITY_'";
 	
-	private static final String queryCategories = "select distinct category_id as category from user_city_category_scores uccs\n"
-			+ "where uccs.city = '_CITY_'";
+	//private static final String queryCategories = "select distinct category_id as category from user_city_category_scores uccs\n"
+		//	+ "where uccs.city = '_CITY_'";
+	
+	private static final String queryCategories="select category_id as category from (select distinct category_id as category_id from user_city_category_scores uccs\n"+
+			"where uccs.city = '_CITY_') res\n"+
+			"inner join category c on (c.id=res.category_id)\n"+
+			"where level<_LEVEL_";
 	
 	private ArrayList <Integer> categories;
 	private DbConnector db;
 	private String city;
 	HashMap<Long, HashMap<Long, Double>> userFeatureMatrix;
-	
+	private int level;
 
-	public UsersFeaturesMatrix(String city) {
+	public UsersFeaturesMatrix(String city, int level) {
 		db = new PostgresConnector();
 		this.city = city;
+		this.level = level;
 		db.connect();
 	}
 	
 	public void initializeCategories(){
 		try {
 			String query = queryCategories.replace("_CITY_", city);
+			query = query.replace("_LEVEL_", ""+level);
 			db.executeQuery(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -96,7 +103,7 @@ public class UsersFeaturesMatrix {
 	}
 
 	public static void main(String[] args) throws IOException, TasteException, SQLException {
-		UsersFeaturesMatrix u = new UsersFeaturesMatrix("Los Angeles");
+		UsersFeaturesMatrix u = new UsersFeaturesMatrix("Los Angeles",1);
 		u.initializeUserFeatureMatrix();
 		double d=u.getPreference(new Long(2015262),new Long(419));
 		System.out.println(d);

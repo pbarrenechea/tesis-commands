@@ -17,22 +17,29 @@ public class VenuesFeaturesMatrix {
 
 	private static final Logger logger = LogManager.getLogger(UsersFeaturesMatrix.class);
 
-	private static final String queryVenuePreference = "select vc.venue_id as venue_id, vc.category from venue_category vc \n"+
-			"inner join venue v on (v.id=vc.venue_id)"
-			+ "where v.city = '_CITY_'";
-	private static final String queryCategories = "select distinct vc.category as category from venue_category vc\n"
-			+"inner join venue v on (v.id=vc.venue_id)"
-			+ "where v.city = '_CITY_'";
-	private int maxFeatures=0;
+	private static final String queryVenuePreference = "select vc.venue_id as venue_id, vc.category from venue_category vc \n"
+			+ "inner join venue v on (v.id=vc.venue_id) " + "where v.city = '_CITY_'";
+	
+	//private static final String queryCategories = "select distinct vc.category as category from venue_category vc\n"
+		//	+ "inner join venue v on (v.id=vc.venue_id)" + "where v.city = '_CITY_'";
+
+	private static final String queryCategories = "select category from (\n"
+			+ "select distinct vc.category as category from venue_category vc\n"
+			+ "inner join venue v on (v.id=vc.venue_id)\n" + "where v.city = 'Los Angeles'\n" + ") res\n"
+			+ "inner join category c on (c.id=res.category)\n" + "where level<_LEVEL_";;
+
+	private int maxFeatures = 0;
 
 	private DbConnector db;
 	private String city;
 	HashMap<Long, HashMap<Long, Double>> venueFeatureMatrix;
-	private ArrayList <Integer> categories;
-	
-	public VenuesFeaturesMatrix(String city) {
+	private ArrayList<Integer> categories;
+	private int level;
+
+	public VenuesFeaturesMatrix(String city,int level) {
 		db = new PostgresConnector();
 		this.city = city;
+		this.level = level;
 	}
 
 	public void initializeVenueFeatureMatrix() {
@@ -61,22 +68,23 @@ public class VenuesFeaturesMatrix {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		initializeCategories();
-		
+
 		this.venueFeatureMatrix = venueFeatureMatrixAux;
 	}
-	
-	public void initializeCategories(){
+
+	public void initializeCategories() {
 		try {
 			String query = queryCategories.replace("_CITY_", city);
+			query = query.replace("_LEVEL_", ""+level);
 			db.executeQuery(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ResultSet distinctCategories = db.getLastResults();
-		ArrayList<Integer> categories =new ArrayList<Integer>();
+		ArrayList<Integer> categories = new ArrayList<Integer>();
 		try {
 			while (distinctCategories.next()) {
 				categories.add(distinctCategories.getInt("category"));
@@ -98,23 +106,25 @@ public class VenuesFeaturesMatrix {
 	}
 
 	public static void main(String[] args) throws IOException, TasteException, SQLException {
-		VenuesFeaturesMatrix u = new VenuesFeaturesMatrix("Los Angeles");
+		VenuesFeaturesMatrix u = new VenuesFeaturesMatrix("Los Angeles",1);
 		u.initializeVenueFeatureMatrix();
-		double d=u.getPreference(new Long(106),new Long(187));
+		double d = u.getPreference(new Long(106), new Long(187));
 		System.out.println(d);
 		// HashMap<Long,HashMap<Long,Double>> vector=u.getUserFeatureMatrix();
-		// System.out.println(vector);2015262={384=1.7646895381296661, 418=0.7838735539822874, 436=1.0357836815978831, 357=0.8664339756999316}
+		// System.out.println(vector);2015262={384=1.7646895381296661,
+		// 418=0.7838735539822874, 436=1.0357836815978831,
+		// 357=0.8664339756999316}
 	}
 
 	public int getMaxFeatures() {
 		return maxFeatures;
 	}
 
-	public ArrayList <Integer> getCategories() {
+	public ArrayList<Integer> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(ArrayList <Integer> categories) {
+	public void setCategories(ArrayList<Integer> categories) {
 		this.categories = categories;
 	}
 

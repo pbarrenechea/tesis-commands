@@ -84,10 +84,8 @@ public class MySVDPlusPlusFactorizer extends MyRatingSGDFactorizer {
 
 	@Override
 	public Factorization factorize() throws TasteException {
-		prepareTraining();
-
+		//prepareTraining();
 		super.factorize();
-
 		for (int userIndex = 0; userIndex < userVectors.length; userIndex++) {
 			for (int itemIndex : itemsByUser.get(userIndex)) {
 				for (int feature = FEATURE_OFFSET; feature < numFeatures; feature++) {
@@ -100,7 +98,6 @@ public class MySVDPlusPlusFactorizer extends MyRatingSGDFactorizer {
 						+ p[userIndex][feature]);
 			}
 		}
-
 		return createFactorization(userVectors, itemVectors);
 	}
 
@@ -152,6 +149,7 @@ public class MySVDPlusPlusFactorizer extends MyRatingSGDFactorizer {
 				y[itemIndex2][feature] += learningRate * deltaI2;
 			}
 		}
+	
 	}
 
 	private double predictRating(double[] userVector, int itemID) {

@@ -1,6 +1,7 @@
 package com.recommender;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
@@ -122,6 +123,7 @@ public class MyRatingSGDFactorizer extends AbstractFactorizer {
 		cachePreferences();
 		shufflePreferences();
 	}
+	//protected HashMap<Integer,Integer> mappedCategory;
 	
 	private void fillItemAndUserVectors() throws TasteException{
 		double[][] newUserVectors = new double[dataModel.getNumUsers()][numFeatures];
@@ -131,6 +133,7 @@ public class MyRatingSGDFactorizer extends AbstractFactorizer {
 		
 		for (int feature = 0; feature < categories.size(); feature++) {
 			Integer category=categories.get(feature);
+			//mappedCategory.put(feature, category);
 			
 			for (int userIndex = 0; userIndex < newUserVectors.length; userIndex++) {
 				newUserVectors[userIndex][0] = globalAverage;
@@ -209,7 +212,6 @@ public class MyRatingSGDFactorizer extends AbstractFactorizer {
 	public Factorization factorize() throws TasteException {
 		prepareTraining();
 		double currentLearningRate = learningRate;
-
 		for (int it = 0; it < numIterations; it++) {
 			for (int index = 0; index < cachedUserIDs.length; index++) {
 				long userId = cachedUserIDs[index];
@@ -219,6 +221,7 @@ public class MyRatingSGDFactorizer extends AbstractFactorizer {
 			}
 			currentLearningRate *= learningRateDecay;
 		}
+		
 		return createFactorization(userVectors, itemVectors);
 	}
 

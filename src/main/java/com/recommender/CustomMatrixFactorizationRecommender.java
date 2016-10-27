@@ -24,12 +24,14 @@ public class CustomMatrixFactorizationRecommender extends CustomRecommender {
 
 	private VenuesFeaturesMatrix vfm;
 	private UsersFeaturesMatrix ufm;
+	private String city="New York";
+	private int level=5;
 
 	public CustomMatrixFactorizationRecommender(DataModel model) throws TasteException {
 		this.dmodel = model;
 		
-		ufm=new UsersFeaturesMatrix("Los Angeles");
-		vfm=new VenuesFeaturesMatrix("Los Angeles");
+		ufm=new UsersFeaturesMatrix(city,level);
+		vfm=new VenuesFeaturesMatrix(city,level);
 		ufm.initializeUserFeatureMatrix();
 		vfm.initializeVenueFeatureMatrix();
 		

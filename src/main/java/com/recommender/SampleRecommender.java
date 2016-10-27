@@ -31,31 +31,27 @@ public class SampleRecommender {
 	private static CustomRecommender recommender;
 
 	public static void main(String[] args) throws IOException, TasteException, SQLException {
-        TreesLoader.getInstance().load("Los Angeles");
-		BasicConfigurator.configure();
-		DataModel model = new FileDataModel(new File("losangelesbaseline.csv"));
-
-/*
-        final SVDPlusPlusFactorizer factorizer2 = new SVDPlusPlusFactorizer(model, 10, 5);
-		RecommenderBuilder recommenderBuilder = new RecommenderBuilder(){
-			public Recommender buildRecommender(DataModel model) throws TasteException {
-				return new SVDRecommender(model,factorizer2);
-			}
-		};
-		RecommenderEvaluator rmse = new RMSRecommenderEvaluator();
-		double result =rmse.evaluate(recommenderBuilder, null, model, 0.8, 0.2);
-
-		System.out.println( "RMSE metrics: " + result);
-*/
-
-
 		System.out.println("Enter recommender: ");
-		user_input = new Scanner( System.in );
+		user_input = new Scanner( System.in ); 
+
+		SampleRecommender sample=new SampleRecommender();
+		//Baseline
+		sample.runRecommenderAndEvaluation("New York","newyorkbaseline.csv");
+		//sample.runRecommenderAndEvaluation("Los Angeles","losangelesbaseline.csv");
+		//Infered
+		//sample.runRecommenderAndEvaluation("New York","newyork.csv");
+		//sample.runRecommenderAndEvaluation("Los Angeles","losangeles.csv");
+    }
+	
+	public void runRecommenderAndEvaluation(String city,String file) throws SQLException, IOException, TasteException{
+		TreesLoader.getInstance().load(city);
+		BasicConfigurator.configure();
+		DataModel model = new FileDataModel(new File(file));
+		
 		String rec;
 		rec = user_input.next( );
 		recommender = RecommenderFactory.getInstance().create(rec, model);
-		recommender.evaluate();
-
-    }
+		recommender.evaluateAVG();
+	}
 
 }
