@@ -6,6 +6,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,34 +18,36 @@ public class PopulateRatings implements Command {
 
     private static final Logger logger = LogManager.getLogger(PopulateRatings.class);
 
-   private final String queryRatings = "select t.id_user, v.id, count(1) as total\n" +
-           "from tips t\n" +
-           "inner join venue v on ( v.id = t.venue_id )\n" +
-           "group by t.id_user, v.id\n" +
-           "order by total DESC;";
-
-   private final String qInsertRating = "insert into ratings2 (user_id, venue_id, rating) values ";
+   private final String queryRatings = "select t.id_user,v.id, (case when count(1) > 5.0 then 5.0 else count(1)  END) as total from tips t\n" +
+           "inner join venue v on (t.id_venue=v.venue_id)\n" +
+           "where v.city = '_CITY_' " +
+           "group by t.id_user, v.id;";
 
    private DbConnector db;
 
-   public PopulateRatings(){
+   private String city = "";
+
+   public PopulateRatings(String param){
        this.db = new PostgresConnector();
+       this.city = param;
    }
 
-    public void run() throws SQLException, UnirestException {
+   public void run() throws SQLException, UnirestException, IOException {
+       FileWriter csv = new FileWriter(this.city.toLowerCase().replace(" ","_") + ".csv", true);
+       String selectQuery = queryRatings.replace("_CITY_", this.city);
         db.connect();
-        db.executeQuery(queryRatings);
+        db.executeQuery(selectQuery);
         ResultSet ratings = db.getLastResults();
         while( ratings.next() ){
             long userId = ratings.getLong("id_user");
             long venueId = ratings.getLong("id");
             int rating = ratings.getInt("total");
-            String qInsert = qInsertRating + "( ";
-            qInsert += userId + ", ";
-            qInsert += venueId + ", ";
-            qInsert += rating + " );";
-            logger.debug(qInsert);
-            db.executeUpdate(qInsert);
+            String line = "";
+            line += userId + "," + venueId + ",";
+            line += (rating > 5) ? 5 : rating;
+            csv.write(line + "\n");
+            csv.flush();
         }
-    }
+       csv.close();
+   }
 }

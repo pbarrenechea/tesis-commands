@@ -2,6 +2,7 @@ package com.commands.command;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -9,5 +10,5 @@ import java.sql.SQLException;
  */
 public interface Command {
 
-    void run() throws SQLException, UnirestException;
+    void run() throws SQLException, UnirestException, IOException;
 }

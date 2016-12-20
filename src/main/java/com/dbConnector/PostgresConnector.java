@@ -4,6 +4,9 @@ import com.commands.config.Config;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
 
 /**
@@ -26,9 +29,7 @@ public class PostgresConnector implements DbConnector{
                     Config.getInstance().getProperty("postgres.database_password"));
             logger.debug("Succesfully connected to Postgres");
         } catch (SQLException e) {
-            logger.debug("Connection Failed! Check output console");
-            e.printStackTrace();
-            return;
+           e.printStackTrace();
         }
     }
 

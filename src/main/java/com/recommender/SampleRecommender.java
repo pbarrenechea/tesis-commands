@@ -34,12 +34,12 @@ public class SampleRecommender {
 		System.out.println("Enter recommender: ");
 		user_input = new Scanner( System.in ); 
 
-		SampleRecommender sample=new SampleRecommender();
+		SampleRecommender sample = new SampleRecommender();
 		//Baseline
 		sample.runRecommenderAndEvaluation("New York","newyorkbaseline.csv");
 		//sample.runRecommenderAndEvaluation("Los Angeles","losangelesbaseline.csv");
 		//Infered
-		//sample.runRecommenderAndEvaluation("New York","newyork.csv");
+		//sample.runRecommenderAndEvaluation("New York","newyork.csv.ori");
 		//sample.runRecommenderAndEvaluation("Los Angeles","losangeles.csv");
     }
 	

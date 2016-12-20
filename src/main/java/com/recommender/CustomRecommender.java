@@ -8,6 +8,9 @@ import org.apache.mahout.cf.taste.eval.RecommenderIRStatsEvaluator;
 import org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
 import org.apache.mahout.cf.taste.impl.eval.RMSRecommenderEvaluator;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+
+import java.util.List;
 
 /**
  * Created by Usuario on 26/07/2016.
@@ -31,7 +34,9 @@ public abstract class CustomRecommender {
 		result = mae.evaluate(this.builder, null, this.dmodel, 0.7, 0.3);
 		System.out.println("MAE metrics: " + result);
 	}
-	
+
+	public abstract List<RecommendedItem> recommend(long userId) throws TasteException;
+
 	private static final int ITERATIONS=10;
 
 	public void evaluateAVG() throws TasteException {

@@ -2,14 +2,15 @@ package com.recommender;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
-import org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer;
 import org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 
 import com.recommender.dataStructures.UsersFeaturesMatrix;
@@ -56,4 +57,8 @@ public class CustomMatrixFactorizationRecommender extends CustomRecommender {
         return new ArrayList<Integer>(set);
     }
 
+	@Override
+	public List<RecommendedItem> recommend(long userId) throws TasteException {
+		return null;
+	}
 }

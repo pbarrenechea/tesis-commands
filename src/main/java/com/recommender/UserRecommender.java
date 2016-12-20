@@ -16,8 +16,12 @@ import org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity;
 import org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+import java.util.List;
 
 /**
  * Created by Usuario on 26/07/2016.
@@ -40,6 +44,21 @@ public class UserRecommender extends CustomRecommender{
         this.dmodel = model;
         this.builder = new UserRecommenderBuilder();
         this.evaluator = new GenericRecommenderIRStatsEvaluator();
+    }
+
+    public List<RecommendedItem> recommend(long userId) throws TasteException {
+        try {
+            System.out.println("Recommending for " + userId);
+            UserSimilarity similarity = new UserTreeComparison();
+            UserNeighborhood neighborhood = new NearestNUserNeighborhood(1000, 0.5, similarity, this.dmodel,0.5);
+            UserBasedRecommender recommender = new GenericUserBasedRecommender(this.dmodel, neighborhood, similarity);
+            List<RecommendedItem> results = recommender.recommend(userId, 10);
+            System.out.println("Found " + results.size() + " recommendations");
+            return results;
+        } catch (TasteException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

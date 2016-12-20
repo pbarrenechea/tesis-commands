@@ -1,3 +1,16 @@
+/out
+/newyorkbaseline.csv
+/newyorkbaselineunsorted.csv
+/newyork4k.csv
+/newyork.csv.ori
+/new_york_sentiment.csv
+/new_york.csv
+/losangelesbaseline.csv
+/losangeles4k.csv
+/losangeles.csv
+/newyork1k.csv
+/newyork2k.csv
+/newyork1kNoninferred.csv
 /.idea
 /target
 /tesis-commands.iml

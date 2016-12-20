@@ -6,7 +6,10 @@ import org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
 import org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer;
 import org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
+
+import java.util.List;
 
 /**
  * Created by Usuario on 26/07/2016.
@@ -27,4 +30,8 @@ public class MatrixFactorizationRecommender extends CustomRecommender {
     }
 
 
+    @Override
+    public List<RecommendedItem> recommend(long userId) throws TasteException {
+        return null;
+    }
 }
