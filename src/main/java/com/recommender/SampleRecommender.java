@@ -6,17 +6,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.mahout.cf.taste.common.TasteException;
-
-import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
-import org.apache.mahout.cf.taste.eval.RecommenderEvaluator;
-import org.apache.mahout.cf.taste.impl.eval.RMSRecommenderEvaluator;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
-
-import org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer;
-import org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer;
-import org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender;
 import org.apache.mahout.cf.taste.model.DataModel;
-import org.apache.mahout.cf.taste.recommender.Recommender;
 
 
 import java.io.File;
@@ -36,18 +27,17 @@ public class SampleRecommender {
 
 		SampleRecommender sample = new SampleRecommender();
 		//Baseline
-		sample.runRecommenderAndEvaluation("New York","newyorkbaseline.csv");
-		//sample.runRecommenderAndEvaluation("Los Angeles","losangelesbaseline.csv");
-		//Infered
-		//sample.runRecommenderAndEvaluation("New York","newyork.csv.ori");
-		//sample.runRecommenderAndEvaluation("Los Angeles","losangeles.csv");
+		//sample.runRecommenderAndEvaluation("New York","newyorkbaseline.csv");
+
+		/***** Sentiment tests *****/
+		//sample.runRecommenderAndEvaluation("Los Angeles", "los_angeles_sentiment.csv");
+        sample.runRecommenderAndEvaluation("New York", "newyork_inferred_sentiment.csv");
     }
 	
 	public void runRecommenderAndEvaluation(String city,String file) throws SQLException, IOException, TasteException{
 		TreesLoader.getInstance().load(city);
 		BasicConfigurator.configure();
 		DataModel model = new FileDataModel(new File(file));
-		
 		String rec;
 		rec = user_input.next( );
 		recommender = RecommenderFactory.getInstance().create(rec, model);

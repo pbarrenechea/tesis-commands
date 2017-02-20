@@ -24,6 +24,8 @@ public class PopulateSentimentRatings implements Command {
             "where v.city = '_CITY_'\n" +
             "group by t.id_user, v.id;";
 
+    private final String insertRatings = "insert into sentiment_ratings (user_id, venue_id, sentiment) values (_UID_, _VID_, _SENT_)";
+
     private DbConnector db;
 
     private String city = "";
@@ -34,7 +36,7 @@ public class PopulateSentimentRatings implements Command {
     }
 
     public void run() throws SQLException, UnirestException, IOException {
-        FileWriter csv = new FileWriter(this.city.toLowerCase().replace(" ","_") + "_sentiment.csv", true);
+        //FileWriter csv = new FileWriter(this.city.toLowerCase().replace(" ","_") + "_sentiment.csv", true);
         String selectQuery = queryRatings.replace("_CITY_", this.city);
         db.connect();
         db.executeQuery(selectQuery);
@@ -44,15 +46,18 @@ public class PopulateSentimentRatings implements Command {
             long venueId = ratings.getLong("id");
             int totalCheckins = ratings.getInt("total");
             double sent = ratings.getDouble("sent");
-            String line = "";
-            line += userId + "," + venueId + ",";
+          //  String line = "";
+          //  line += userId + "," + venueId + ",";
             double sign = Math.signum((double)totalCheckins - sent);
             double heaviside = (Math.abs((double)totalCheckins - sent) - 2 >= 0) ? 1.0 : 0.0;
             double finalRating = totalCheckins - sign * heaviside;
-            csv.write( line + finalRating  + "\n");
-            csv.flush();
-
+            String valuesToInsert = insertRatings.replace("_UID_", Long.toString(userId));
+            valuesToInsert = valuesToInsert.replace("_VID_", Long.toString(venueId));
+            valuesToInsert = valuesToInsert.replace("_SENT_", Double.toString(finalRating));
+            db.executeUpdate(valuesToInsert);
+            //csv.write( line + finalRating  + "\n");
+            //csv.flush();
         }
-        csv.close();
+        //csv.close();
     }
 }

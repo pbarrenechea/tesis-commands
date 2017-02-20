@@ -23,7 +23,7 @@ public class CommandLine {
         user_input = new Scanner( System.in );
         String command;
         command = user_input.next( );
-        Command commandToExecute = CommandFactory.getInstance().createCommand(command, "New York");
+        Command commandToExecute = CommandFactory.getInstance().createCommand(command, "Los Angeles");
         commandToExecute.run();
     }
 }

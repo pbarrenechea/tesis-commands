@@ -49,10 +49,10 @@ public abstract class CustomRecommender {
 		double precisionAVG=0;
 		double recallAVG=0;
 		for (int i = 1; i <= ITERATIONS; i++) {
-			//this.stats = this.evaluator.evaluate(this.builder, null, this.dmodel, null, 5, 0.7, 0.8);
+			this.stats = this.evaluator.evaluate(this.builder, null, this.dmodel, null, 5, 0.7, 0.8);
 			//System.out.format("The recommender precision is %f%n", stats.getPrecision());
-			//precisionAcum+=stats.getPrecision();
-			//recallAcum+=stats.getRecall();
+			precisionAcum+=stats.getPrecision();
+			recallAcum+=stats.getRecall();
 			//System.out.format("The recommender recall is %f%n", stats.getRecall());
 			//System.out.format("The recommender F1 is %f%n", stats.getF1Measure());
 			RecommenderEvaluator rmse = new RMSRecommenderEvaluator();

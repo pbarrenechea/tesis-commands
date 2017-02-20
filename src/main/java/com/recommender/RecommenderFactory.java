@@ -25,7 +25,10 @@ public class RecommenderFactory {
             newCustomRecommender = new MatrixFactorizationRecommender(data);
         } else if (str.equals("Custom")) {
     		newCustomRecommender = new CustomMatrixFactorizationRecommender(data);
-    	}
+    	}else if( str.equals("Cosine") ){
+            newCustomRecommender = new UserCosineRecommender(data);
+        }
+
         return newCustomRecommender;
     }
 }

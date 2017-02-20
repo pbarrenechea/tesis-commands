@@ -21,12 +21,12 @@ public class Tester {
     private static final Logger logger = LogManager.getLogger(Tester.class);
 
     public static void main(String[] args) throws SQLException, TasteException, IOException {
-        FileWriter ratings = new FileWriter("losangeles.csv", true);
-        DataCenter.getInstance().load("Los Angeles", 5,34.0783,-118.263);
+        FileWriter ratings = new FileWriter("newyork_inferred_sentiment.csv", true);
+        DataCenter.getInstance().load("New York", 40,40.724494,-73.994401);
         HashMap<Long, User> users = DataCenter.getInstance().getUsers();
         for( Map.Entry<Long, User> entry : users.entrySet()  ){
-            PreferenceAwareCandidateSelection pacs = new PreferenceAwareCandidateSelection("Los Angeles",34.0783,-118.263, 5, entry.getKey() );
-            pacs.calculateRatings();
+            PreferenceAwareCandidateSelection pacs = new PreferenceAwareCandidateSelection("New York",40.724494,-73.994401,40, entry.getKey() );
+            pacs.calculateRatings(true);
             HashMap<Long, Double> hRatings = pacs.getUserRatings();
             for(  Map.Entry<Long, Double> rEntry : hRatings.entrySet() ){
                 String line;

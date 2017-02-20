@@ -30,7 +30,7 @@ public class UserRecommender extends CustomRecommender{
 
     public class UserRecommenderBuilder implements RecommenderBuilder {
 
-        RecommenderIRStatsEvaluator evaluator = new GenericRecommenderIRStatsEvaluator();
+        protected RecommenderIRStatsEvaluator evaluator = new GenericRecommenderIRStatsEvaluator();
 
         public Recommender buildRecommender(DataModel dataModel) throws TasteException {
             UserSimilarity similarity = new UserTreeComparison();

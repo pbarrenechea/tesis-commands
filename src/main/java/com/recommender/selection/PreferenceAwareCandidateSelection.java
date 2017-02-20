@@ -62,7 +62,7 @@ public class PreferenceAwareCandidateSelection {
         return this.venuesRating;
     }
 
-    public void calculateRatings() throws TasteException {
+    public void calculateRatings(boolean sentimentApproach) throws TasteException {
         User currentUser = DataCenter.getInstance().getUser(this.userId);
         UserTreeComparison sim = new UserTreeComparison();
         for(Venue v : this.selectedVenues ){
@@ -79,7 +79,12 @@ public class PreferenceAwareCandidateSelection {
                 }
             }else{
                 logger.debug("User already visited this venue");
-                vrating = new Double((double)currentUser.getUserCheckinsAt(v.getId()));
+                if( !sentimentApproach ){
+                    vrating = new Double((double)currentUser.getUserCheckinsAt(v.getId()));
+                }else{
+                    vrating = DataCenter.getInstance().getUserVenueSent(currentUser.getUserId(), v.getId());
+                }
+
             }
             logger.debug("Rating to " + vid + " is " + vrating );
             this.venuesRating.put(vid, vrating);

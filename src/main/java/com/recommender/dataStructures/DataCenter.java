@@ -18,7 +18,9 @@ public class DataCenter {
             "where public.distance( _LAT_, _LON_,  v.latitude, v.longitude) < _RADIUS_\n" +
             " and v.city = '_CITY_' \n"+
             "group by (t.id_user, t.venue_id, v.name, v.latitude, v.longitude)";
-    //
+
+    private final String querySentiment = "select * from sentiment_ratings";
+
     private DbConnector db;
 
     private static DataCenter instance;
@@ -26,6 +28,8 @@ public class DataCenter {
     private HashMap<Long, Venue> venues;
 
     private HashMap<Long, User> users;
+
+    private HashMap<String, Double> userSentiment;
 
     public static DataCenter getInstance(){
         if( instance  == null ){
@@ -35,6 +39,22 @@ public class DataCenter {
     }
     private DataCenter(){
         db = new PostgresConnector();
+    }
+
+    private void loadSentimenRatings() throws SQLException {
+        this.userSentiment = new HashMap<String, Double>();
+        db.executeQuery(querySentiment);
+        ResultSet ratings = db.getLastResults();
+        while( ratings.next() ){
+            long userId = ratings.getLong("user_id");
+            long venueId = ratings.getLong("venue_id");
+            double sent = ratings.getDouble("sentiment");
+            this.userSentiment.put(Long.toString(userId) + "_" + Long.toString(venueId), new Double(sent));
+        }
+    }
+
+    public Double getUserVenueSent(long userId, long venueId){
+        return this.userSentiment.get(Long.toString(userId) + "_" + Long.toString(venueId));
     }
 
     public void load(String city, double radius, double lat, double lon) throws SQLException {
@@ -52,6 +72,7 @@ public class DataCenter {
             this.addVenue(venuesUser);
             this.addUser(venuesUser);
         }
+        this.loadSentimenRatings();
     }
 
     public HashMap<Long, Venue> getVenues(){ return this.venues; }
