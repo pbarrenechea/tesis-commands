@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class CategoryCityWeight  implements Command{
 
-    private static final Logger logger = LogManager.getLogger(SentimentTagger.class);
+    private static final Logger logger = LogManager.getLogger(CategoryCityWeight.class);
 
     private final String queryCategoryCityChekins = "select * from city_category_total";
     private final String queryUserCategoryCityTotals = "select * from user_city_category where city = '_CITY_' AND category = _CID_";

@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class CategoriesLoader implements Command {
 
 
-    private static final Logger logger = LogManager.getLogger(SentimentTagger.class);
+    private static final Logger logger = LogManager.getLogger(CategoriesLoader.class);
     private String JSON_PATH = "categories.json";
     private JSONObject entryData;
     private final String insertQuery = "INSERT INTO CATEGORY (name, hash_id,parent_hash_id, level) values ('_NAME_', '_HASH_', '_PARENT_HASH_', _LEVEL_ )";

@@ -1,13 +1,11 @@
 package com.commands;
 
 import com.commands.command.*;
-import com.commands.sentiment.SentimentCalculator;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -25,7 +23,7 @@ public class CommandLine {
         user_input = new Scanner( System.in );
         String command;
         command = user_input.next( );
-        Command commandToExecute = CommandFactory.getInstance().createCommand(command);
+        Command commandToExecute = CommandFactory.getInstance().createCommand(command, "Los Angeles");
         commandToExecute.run();
     }
 }

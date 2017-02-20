@@ -1,5 +1,5 @@
 package com.recommender;
-import com.recommender.similarity.UserTreeComparison;
+
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
@@ -10,26 +10,15 @@ import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
+/**
+ * Created by Usuario on 15/08/2016.
+ */
+
 public class MyRecommenderBuilder implements RecommenderBuilder {
-
-
-	public Recommender buildRecommender(DataModel dataModel) throws TasteException {
-		UserSimilarity similarity = new UserTreeComparison();
-		UserNeighborhood neighborhood;
-		 //neighborhood = new ThresholdUserNeighborhood(0.1, similarity, dataModel);
-		neighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
-		
-		/*try {
-			neighborhood = new MyNeighborhood(similarity, dataModel);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			System.exit(0);
-			e.printStackTrace();
-		}*/
-		
-		return new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
-		//return new MyUserBasedRecommender(dataModel, neighborhood, similarity);
-	}
-
+    public Recommender buildRecommender(DataModel dataModel) throws TasteException {
+        UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
+        UserNeighborhood neighborhood=null;
+        neighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
+        return new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
+    }
 }

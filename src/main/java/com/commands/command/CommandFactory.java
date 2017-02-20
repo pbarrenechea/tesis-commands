@@ -23,7 +23,7 @@ public class CommandFactory {
      * @param command : command to create
      * @return Command
      */
-    public Command createCommand(String command) throws IOException, SQLException {
+    public Command createCommand(String command, String param) throws IOException, SQLException {
         Command commandToExecute;
         if( command.equals("sentiment") ){
             commandToExecute = new SentimentTagger();
@@ -47,6 +47,10 @@ public class CommandFactory {
             commandToExecute = new CategoryCityWeight();
         }else if( command.equals("userCategoriesPreference") ){
             commandToExecute = new UserCategoriesPreferences();
+        }else if( command.equals("populateRatings") ){
+            commandToExecute = new PopulateRatings(param);
+        }else if ( command.equals("populateSentimentRatings")){
+            commandToExecute = new PopulateSentimentRatings(param);
         }else{
             return null;
         }

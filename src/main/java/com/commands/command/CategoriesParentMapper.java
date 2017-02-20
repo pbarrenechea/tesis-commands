@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class CategoriesParentMapper implements Command{
 
-    private static final Logger logger = LogManager.getLogger(SentimentTagger.class);
+    private static final Logger logger = LogManager.getLogger(CategoriesParentMapper.class);
     private DbConnector db;
     private final String updateQuery = "UPDATE category SET parent_category = _PARENT_ID_ where id = _ID_";
     private HashMap<String, CategoryItem> parentMap = new HashMap<String, CategoryItem>();

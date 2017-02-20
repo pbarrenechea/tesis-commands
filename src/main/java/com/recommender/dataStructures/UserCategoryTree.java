@@ -16,6 +16,8 @@ public class UserCategoryTree {
 
     private HashMap<Integer, List<UserCategoryNode>> levelNodes;
 
+    private long userId;
+
     private long totalChekins = 0;
 
     public long getTotalChekins() {
@@ -26,7 +28,8 @@ public class UserCategoryTree {
         this.totalChekins = totalChekins;
     }
 
-    public UserCategoryTree(){
+    public UserCategoryTree(long userId){
+        this.userId = userId;
         this.levelNodes = new HashMap<Integer, List<UserCategoryNode>>();
     }
 
@@ -39,10 +42,22 @@ public class UserCategoryTree {
         currentLevelNodes.add(node);
     }
 
-    public long getLevels(){
+    public int getLevels(){
         return levelNodes.size();
     }
 
+    public UserCategoryNode getCategoryByLevel(long category, int level){
+        List<UserCategoryNode> nodes = this.levelNodes.get(new Integer(level));
+        if( nodes != null ){
+            for( UserCategoryNode tmpNode : nodes ){
+                if( category == tmpNode.getId() ){
+                    return tmpNode;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
 
     public List<UserCategoryNode> getLevel(int level){
         List<UserCategoryNode> result = this.levelNodes.get(new Integer(level));
@@ -61,6 +76,19 @@ public class UserCategoryTree {
             }
         }
         return result;
+    }
+
+    public double getLevelMinScore(int level){
+        double min = 999999.99;
+        List<UserCategoryNode> levelNodes = this.levelNodes.get(new Integer(level));
+        if( levelNodes != null ){
+            for( UserCategoryNode node : levelNodes ){
+                min = Math.min(node.getScore(), min);
+            }
+            return min;
+        }else{
+            return 0;
+        }
     }
 
     public double getLevelEntrophy(int level){
