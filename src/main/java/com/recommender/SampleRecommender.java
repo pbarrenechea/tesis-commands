@@ -30,16 +30,17 @@ public class SampleRecommender {
 		//sample.runRecommenderAndEvaluation("New York","newyorkbaseline.csv");
 
 		/***** Sentiment tests *****/
-		//sample.runRecommenderAndEvaluation("Los Angeles", "los_angeles_sentiment.csv");
-        sample.runRecommenderAndEvaluation("New York", "newyork_inferred_sentiment.csv");
+		sample.runRecommenderAndEvaluation("Los Angeles", "losangeles_inferred_sentiment.csv");
+        //sample.runRecommenderAndEvaluation("New York", "newyork_inferred_sentiment2.csv");
     }
 	
 	public void runRecommenderAndEvaluation(String city,String file) throws SQLException, IOException, TasteException{
-		TreesLoader.getInstance().load(city);
+		TreesLoader.getInstance().load(city, false);
 		BasicConfigurator.configure();
 		DataModel model = new FileDataModel(new File(file));
 		String rec;
-		rec = user_input.next( );
+		//rec = user_input.next( );
+		rec = "User";
 		recommender = RecommenderFactory.getInstance().create(rec, model);
 		recommender.evaluateAVG();
 	}

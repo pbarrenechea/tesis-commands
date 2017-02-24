@@ -58,7 +58,7 @@ public class DataCenter {
     }
 
     public void load(String city, double radius, double lat, double lon) throws SQLException {
-        TreesLoader.getInstance().load(city);
+        TreesLoader.getInstance().load(city, false);
         String queryNearestVenues = qNearestVeunes.replace("_RADIUS_", Double.toString(radius));
         queryNearestVenues = queryNearestVenues.replace("_LAT_", Double.toString(lat));
         queryNearestVenues = queryNearestVenues.replace("_LON_", Double.toString(lon));

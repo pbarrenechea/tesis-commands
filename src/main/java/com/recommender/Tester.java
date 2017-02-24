@@ -21,18 +21,21 @@ public class Tester {
     private static final Logger logger = LogManager.getLogger(Tester.class);
 
     public static void main(String[] args) throws SQLException, TasteException, IOException {
-        FileWriter ratings = new FileWriter("newyork_inferred_sentiment.csv", true);
-        DataCenter.getInstance().load("New York", 40,40.724494,-73.994401);
+        FileWriter ratings = new FileWriter("losangeles_inferred_sentiment.csv", true);
+        //DataCenter.getInstance().load("New York", 40,40.724494,-73.994401);
+        DataCenter.getInstance().load("Los Angeles", 60,34.0219242671361,-118.28782081604);
         HashMap<Long, User> users = DataCenter.getInstance().getUsers();
         for( Map.Entry<Long, User> entry : users.entrySet()  ){
-            PreferenceAwareCandidateSelection pacs = new PreferenceAwareCandidateSelection("New York",40.724494,-73.994401,40, entry.getKey() );
+            //PreferenceAwareCandidateSelection pacs = new PreferenceAwareCandidateSelection("New York",40.724494,-73.994401,40, entry.getKey() );
+            PreferenceAwareCandidateSelection pacs = new PreferenceAwareCandidateSelection("Los Angeles",34.0219242671361,-118.28782081604,60, entry.getKey() );
             pacs.calculateRatings(true);
             HashMap<Long, Double> hRatings = pacs.getUserRatings();
             for(  Map.Entry<Long, Double> rEntry : hRatings.entrySet() ){
                 String line;
+                double entryValue = Math.floor(rEntry.getValue());
                 if( rEntry.getValue() > 5.0 ){
                     line = entry.getKey() + "," + rEntry.getKey() + ",5.0";
-                }else{
+                }else {
                     line = entry.getKey() + "," + rEntry.getKey() + "," + rEntry.getValue();
                 }
                 ratings.write(line + "\n");

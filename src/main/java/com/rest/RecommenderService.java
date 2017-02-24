@@ -44,7 +44,7 @@ public class RecommenderService {
                                   @PathParam("file") String fileName,
                                   @PathParam("method") String method) throws TasteException, IOException, SQLException {
         String output = "Received : " + userId;
-        TreesLoader.getInstance().load("Los Angeles");
+        TreesLoader.getInstance().load("Los Angeles", true);
         DataModel model = new FileDataModel(new File(context.getRealPath("static/" + fileName + ".csv")));
         CustomRecommender myRecommender = RecommenderFactory.getInstance().create(method, model);
         List<RecommendedItem> results = myRecommender.recommend(Long.parseLong(userId));

@@ -37,7 +37,7 @@ public abstract class CustomRecommender {
 
 	public abstract List<RecommendedItem> recommend(long userId) throws TasteException;
 
-	private static final int ITERATIONS=10;
+	private static final int ITERATIONS=1;
 
 	public void evaluateAVG() throws TasteException {
 		double rmseAcum=0;
@@ -55,21 +55,21 @@ public abstract class CustomRecommender {
 			recallAcum+=stats.getRecall();
 			//System.out.format("The recommender recall is %f%n", stats.getRecall());
 			//System.out.format("The recommender F1 is %f%n", stats.getF1Measure());
-			RecommenderEvaluator rmse = new RMSRecommenderEvaluator();
-			double result = rmse.evaluate(this.builder, null, this.dmodel, 0.7, 0.3);
+			//RecommenderEvaluator rmse = new RMSRecommenderEvaluator();
+			//double result = rmse.evaluate(this.builder, null, this.dmodel, 0.7, 0.3);
 			//System.out.println("RMSE metrics: " + result);
-			rmseAcum+=result;
-			RecommenderEvaluator mae = new AverageAbsoluteDifferenceRecommenderEvaluator();
-			result = mae.evaluate(this.builder, null, this.dmodel, 0.7, 0.3);
+			//rmseAcum+=result;
+			//RecommenderEvaluator mae = new AverageAbsoluteDifferenceRecommenderEvaluator();
+			//result = mae.evaluate(this.builder, null, this.dmodel, 0.7, 0.3);
 			//System.out.println("MAE metrics: " + result);
-			maeAcum+=result;
+			//maeAcum+=result;
 		}
-		rmseAVG=rmseAcum/ITERATIONS;
-		maeAVG=maeAcum/ITERATIONS;
+		//rmseAVG=rmseAcum/ITERATIONS;
+		//maeAVG=maeAcum/ITERATIONS;
 		precisionAVG=precisionAcum/ITERATIONS;
 		recallAVG=recallAcum/ITERATIONS;
-		System.out.println("MAE AVG: " + maeAVG);
-		System.out.println("RMSE AVG: " + rmseAVG);
+		//System.out.println("MAE AVG: " + maeAVG);
+		//System.out.println("RMSE AVG: " + rmseAVG);
 		System.out.println("Precision AVG: " + precisionAVG);
 		System.out.println("Recall AVG: " + recallAVG);
 	}

@@ -20,12 +20,26 @@ public class TreesLoader {
             "inner join category c on ( ucc.category = c.id )\n" +
             "where  ucc.city = '_CITY_'";
 
+    private static final String querySentimentCheckins = "select * from user_city_category_sent ucc\n" +
+            "inner join user_city_category_sentiment uccs on\n" +
+            "( ucc.user_id = uccs.id_user and ucc.category = uccs.category and ucc.city = uccs.city )\n" +
+            "inner join category c on ( ucc.category = c.id )\n" +
+            "where  ucc.city = '_CITY_'";
+
     private static final String queryTotalCheckinsByUser = "select id_user,count(*) as total from tips t\n" +
             "  inner join venue v on (t.id_venue=v.venue_id)\n" +
             "  where v.city= '_CITY_'\n" +
             "  group by t.id_user";
 
+    private static final String queryTotalSentimentByUser = "select sr.user_id as id_user, sum(sr.sentiment)/count(1) as total\n" +
+            "from sentiment_ratings sr\n" +
+            "inner join venue v on ( v.id = sr.venue_id  )\n" +
+            "where (v.city = '_CITY_' )\n" +
+            "GROUP BY  sr.user_id;";
+
+
     private DbConnector db;
+    private boolean sentiment = false;
 
     HashMap<Long, UserCategoryTree> userTrees;
 
@@ -40,16 +54,18 @@ public class TreesLoader {
         db = new PostgresConnector();
     }
 
-    public void load(String city) throws SQLException {
-        String queryChekinsToLoad = queryChekins.replace("_CITY_", city);
-        String queryTotalCheckinsByUser = queryChekins.replace("_CITY_", city);
+    public void load(String city, boolean sentiment) throws SQLException {
+        this.sentiment = sentiment;
+        String queryChekinsToLoad = (!this.sentiment) ? queryChekins.replace("_CITY_", city): querySentimentCheckins.replace("_CITY_", city) ;
+        String queryTotalCheckinsByUser = (!this.sentiment) ? queryChekins.replace("_CITY_", city) : queryTotalSentimentByUser.replace("_CITY_", city);
         db.connect();
+        System.out.println(queryChekinsToLoad);
         db.executeQuery(queryChekinsToLoad);
         ResultSet userCategoryCitySet = db.getLastResults();
         while( userCategoryCitySet.next() ){
             Long idUser = new Long(userCategoryCitySet.getLong("id_user"));
             long idCategory = userCategoryCitySet.getLong("category");
-            long checkins = userCategoryCitySet.getLong("total");
+            long checkins = (!this.sentiment) ? userCategoryCitySet.getLong("total") : userCategoryCitySet.getLong("cat_sent");
             double score = userCategoryCitySet.getDouble("score");
             String categoryName = userCategoryCitySet.getString("name");
             int level = userCategoryCitySet.getInt("level");

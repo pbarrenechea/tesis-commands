@@ -18,14 +18,20 @@ public class CategoryCityWeight  implements Command{
 
     private static final Logger logger = LogManager.getLogger(CategoryCityWeight.class);
 
-    private final String queryCategoryCityChekins = "select * from city_category_total";
+    private final String queryCategoryCityChekins = "select * from city_category_total where city = 'New York'";
     private final String queryUserCategoryCityTotals = "select * from user_city_category where city = '_CITY_' AND category = _CID_";
-    private final String insertCityCategoryUserPreference = "insert into user_city_category_scores (city, category_id,user_id, score) values ('_CITY_', _CID_, _UID_, _VALUE_)";
+    private final String queryUserCategoryCitySentiment = "select * from user_city_category_sent where city = '_CITY_' AND category = _CID_";
 
-    private static final String usersByCityCheckins="select v.city,count(*) from tips t\n" +
+    private final String insertCityCategoryUserPreference = "insert into user_city_category_scores (city, category_id,user_id, score) values ('_CITY_', _CID_, _UID_, _VALUE_)";
+    private final String insertCityCategoryUserSentPrefrence = "insert into user_city_category_sentiment (city, category,id_user, score) values ('_CITY_', _CID_, _UID_, _VALUE_)";
+
+    private static final String usersByCityCheckins="select v.city,count(1) from tips t\n" +
             "  inner join venue v on (t.id_venue=v.venue_id)\n" +
+            "  where v.city = 'New York' " +
             "            group by v.city";
-    private static final String queryTotalCheckinsByUserByCity = "select id_user,city,sum(total) as total from user_city_category group by id_user,city";
+    private static final String queryTotalCheckinsByUserByCity = "select id_user,city,sum(total) as total from user_city_category where  city = 'New York' group by id_user,city ";
+
+    private boolean sentiment = false;
 
     private DbConnector db;
 
@@ -67,9 +73,10 @@ public class CategoryCityWeight  implements Command{
         return totalCheckinsByUserByCity;
     }
 
-    public CategoryCityWeight(){
+    public CategoryCityWeight(boolean s){
         db = new PostgresConnector();
         db.connect();
+        this.sentiment = s;
         try {
             db.executeQuery(queryCategoryCityChekins);
             ResultSet cityCheckinsRS = db.getLastResults();
@@ -94,21 +101,21 @@ public class CategoryCityWeight  implements Command{
             String[] keyParts = key.split("__");
             String city = keyParts[0];
             String category = keyParts[1];
-            String queryCityCategories = queryUserCategoryCityTotals.replace("_CITY_", city);
+            String queryCityCategories = ( !this.sentiment ) ? queryUserCategoryCityTotals.replace("_CITY_", city) : queryUserCategoryCitySentiment.replace("_CITY_", city) ;
             queryCityCategories = queryCityCategories.replace("_CID_", category);
             db.executeQuery(queryCityCategories);
             ResultSet cityCategoriesToCalculate = db.getLastResults();
             while( cityCategoriesToCalculate.next() ){
-                Long categoryCityTotal = cityCategoriesToCalculate.getLong("total");
-                Long user_id = cityCategoriesToCalculate.getLong("id_user");
-                double tf= (double) categoryCityTotal.longValue()/ (double)totalCheckinsByUserByCity.get(user_id + "_" + city);
+                Long categoryCityTotal = (!this.sentiment) ? cityCategoriesToCalculate.getLong("total"): cityCategoriesToCalculate.getLong("cat_sent");
+                Long user_id = (!this.sentiment) ? cityCategoriesToCalculate.getLong("id_user") : cityCategoriesToCalculate.getLong("user_id");
+                double tf = (double) categoryCityTotal.longValue()/ (double)totalCheckinsByUserByCity.get(user_id + "_" + city);
                 double idf = Math.log( totalCityCheckins.get(city)/total );
                 double tfidf = tf*idf ;
-                String qInsert = insertCityCategoryUserPreference.replace("_UID_", user_id.toString());
+                String qInsert = (!this.sentiment) ? insertCityCategoryUserPreference.replace("_UID_", user_id.toString()) : insertCityCategoryUserSentPrefrence.replace("_UID_", user_id.toString()) ;
                 qInsert = qInsert.replace("_CID_", category.toString());
                 qInsert = qInsert.replace("_CITY_", city);
                 qInsert = qInsert.replace("_VALUE_",String.valueOf(tfidf));
-                logger.debug(qInsert);
+                System.out.println(qInsert);
                 db.executeUpdate(qInsert);
             }
         }
